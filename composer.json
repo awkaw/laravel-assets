@@ -1,6 +1,7 @@
 {
     "name": "awkaw/laravel-assets",
     "description": "Compile Assets for Laravel",
+    "license" : "BSD-3-Clause",
     "keywords": ["assets", "laravel"],
     "authors" : [
         {
