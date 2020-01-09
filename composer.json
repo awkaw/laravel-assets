@@ -1,0 +1,23 @@
+{
+    "name": "awkaw/laravel-assets",
+    "description": "Compile Assets for Laravel",
+    "keywords": ["assets", "laravel"],
+    "authors" : [
+        {
+            "name": "Alexander Krupnov",
+            "email": "awkaw@yandex.ru",
+            "homepage": "https://github.com/awkaw"
+        }
+    ],
+    "require": {
+        "php": "^7.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^4.8.35 || ^5.0 || ^6.0 || ^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Dotenv\\": "src/"
+        }
+    }
+}
