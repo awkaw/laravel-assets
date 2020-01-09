@@ -62,7 +62,7 @@ class LessService{
 		        unlink($cssFile);
 	        }
 
-            $command = "lessc ".((in_array($dir, config("assets.less.minify_selected")))?"-x":"")." {$lessFile} {$cssFile} 2>&1";
+            $command = "lessc {$lessFile} {$cssFile} 2>&1";
 
             exec($command, $output);
 

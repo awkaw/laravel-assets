@@ -23,8 +23,11 @@ class ServiceProvider extends Provider{
      */
     public function boot()
     {
-        LessService::checkFiles();
-        //JsService::checkFiles();
-        //SvgService::checkFiles();
+        if(config("app.env") !== "production" || (config("app.env") == "production" && config("assets.watch_files_when_production"))){
+            
+            LessService::checkFiles();
+            JsService::checkFiles();
+            SvgService::checkFiles();
+        }
     }
 }
