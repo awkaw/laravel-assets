@@ -2,9 +2,7 @@
 
 namespace LaravelAssets;
 
-use Illuminate\Support\ServiceProvider as Provider;
-
-class ServiceProvider extends Provider{
+class ServiceProvider extends \Illuminate\Support\ServiceProvider{
 
     /**
      * Register any application services.
