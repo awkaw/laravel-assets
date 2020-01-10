@@ -17,4 +17,8 @@ class Logger{
 	public static function error($data){
 		Log::error($data);
 	}
+
+	public static function warning($data){
+		Log::warning($data);
+	}
 }
