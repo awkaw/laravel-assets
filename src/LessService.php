@@ -4,14 +4,6 @@ namespace LaravelAssets;
 
 class LessService{
 
-    /*
-     * apt-get install node-less npm
-     * curl -sL https://deb.nodesource.com/setup_13.x | bash -
-     * apt-get install -y nodejs
-     * ln -s /usr/bin/nodejs /usr/sbin/node
-     * npm install -g less
-     * */
-
     static public function checkFiles(){
 
         if(!config("assets.less.enabled")){
