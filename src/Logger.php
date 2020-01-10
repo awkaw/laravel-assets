@@ -13,4 +13,8 @@ class Logger{
 			Log::debug($data);
 		}
 	}
+
+	public static function error($data){
+		Log::error($data);
+	}
 }
