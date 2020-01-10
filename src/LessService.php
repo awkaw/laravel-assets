@@ -2,12 +2,13 @@
 
 namespace LaravelAssets;
 
-use Illuminate\Support\Facades\Log;
-
 class LessService{
 
     /*
-     * apt-get install node-less
+     * apt-get install node-less npm
+     * curl -sL https://deb.nodesource.com/setup_13.x | bash -
+     * apt-get install -y nodejs
+     * ln -s /usr/bin/nodejs /usr/sbin/node
      * npm install -g less
      * */
 
@@ -38,6 +39,8 @@ class LessService{
                 self::compile($dir);
             }
         }
+
+        return true;
     }
 
     static private function getCssFilePath($dir){
@@ -56,6 +59,12 @@ class LessService{
         $lessFile = self::getLessFilePath($dir);
         $cssFile = self::getCssFilePath($dir);
 
+        $cssDir = dirname($cssFile);
+
+        if(!file_exists($cssDir)){
+        	mkdir($cssDir, 0755, true);
+        }
+
         if(file_exists($lessFile)){
 
 	        if(file_exists($cssFile)){
@@ -64,11 +73,17 @@ class LessService{
 
             $command = "lessc {$lessFile} {$cssFile} 2>&1";
 
+	        Logger::debug($command);
+
             exec($command, $output);
 
             if(empty($output)){
 
-                Log::debug("{$cssFile} compiled");
+            	if(file_exists($cssFile)){
+		            Logger::debug("{$cssFile} compiled");
+	            }else{
+		            Logger::debug("{$cssFile} error");
+	            }
 
             }else{
 
@@ -76,7 +91,7 @@ class LessService{
 		            unlink($cssFile);
 	            }
 
-                Log::debug($output);
+	            Logger::debug($output);
             }
         }
     }

@@ -2,8 +2,6 @@
 
 namespace LaravelAssets;
 
-use Illuminate\Support\Facades\Log;
-
 class JsService{
 
     static public function checkFiles(){
@@ -33,6 +31,8 @@ class JsService{
                 self::compile($dir);
             }
         }
+
+        return true;
     }
 
 	static private function getJsCompiledFilePath($dir){
@@ -72,9 +72,9 @@ class JsService{
 		}
 
 		if(!empty($files) && file_put_contents($jsCompiledFile, $content)){
-			Log::debug("{$jsCompiledFile} compiled");
+			Logger::debug("{$jsCompiledFile} compiled");
 		}else{
-			Log::debug("{$jsCompiledFile} error");
+			Logger::debug("{$jsCompiledFile} error");
 		}
 	}
 }

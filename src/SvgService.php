@@ -2,8 +2,6 @@
 
 namespace LaravelAssets;
 
-use Illuminate\Support\Facades\Log;
-
 class SvgService{
 
 	const PREFIX = "symbol_";
@@ -103,7 +101,7 @@ class SvgService{
 
 			$dom->save($spriteFile);
 
-			Log::debug("{$spriteFile} compiled");
+			Logger::debug("{$spriteFile} compiled");
 		}
 	}
 
@@ -115,7 +113,7 @@ class SvgService{
 
 		if($node->nodeName == "#text"){
 
-			Log::debug($node->nodeValue);
+			Logger::debug($node->nodeValue);
 
 			return $doc->createTextNode($node->nodeValue);
 		}
