@@ -14,6 +14,13 @@ class Logger{
 		}
 	}
 
+	public static function info($data){
+
+		if(config("assets.debug")){
+			Log::info($data);
+		}
+	}
+
 	public static function error($data){
 		Log::error($data);
 	}
