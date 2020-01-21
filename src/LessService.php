@@ -75,6 +75,8 @@ class LessService{
 
             exec($command, $output);
 
+            Logger::debug($output);
+
             if(empty($output)){
 
             	if(file_exists($cssFile)){

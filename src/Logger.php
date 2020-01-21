@@ -9,14 +9,14 @@ class Logger{
 
 	public static function debug($data){
 
-		if(config("assets.debug")){
+		if(Manager::config("assets.debug")){
 			Log::debug($data);
 		}
 	}
 
 	public static function info($data){
 
-		if(config("assets.debug")){
+		if(Manager::config("assets.debug")){
 			Log::info($data);
 		}
 	}
