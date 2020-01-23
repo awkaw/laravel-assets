@@ -99,6 +99,12 @@ class SvgService{
 				$root->appendChild($symbol);
 			}
 
+			$spriteDir = dirname($spriteFile);
+
+			if(!file_exists($spriteDir)){
+				mkdir($spriteDir, 0755, true);
+			}
+
 			$dom->save($spriteFile);
 
 			Logger::debug("{$spriteFile} compiled");

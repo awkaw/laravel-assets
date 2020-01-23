@@ -71,6 +71,12 @@ class JsService{
 			}
 		}
 
+		$jsDir = dirname($jsCompiledFile);
+
+		if(!file_exists($jsDir)){
+			mkdir($jsDir, 0755, true);
+		}
+
 		if(!empty($files) && file_put_contents($jsCompiledFile, $content)){
 			Logger::debug("{$jsCompiledFile} compiled");
 		}else{
