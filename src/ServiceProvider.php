@@ -21,7 +21,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider{
      */
     public function boot()
     {
-        if(config("app.env") !== "production" || (config("app.env") == "production" && config("assets.watch_files_when_production"))){
+        if(config("app.env") !== "production" || (config("app.env") == "production" && config("assets.watch_files_when_production") && file_exists(config_path("/")."assets.php"))){
             
             LessService::checkFiles();
             JsService::checkFiles();
