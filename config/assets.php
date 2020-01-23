@@ -7,6 +7,7 @@ return [
 
     "less" => [
         "enabled" => true,
+        "minify" => true,
         "compiler" => "lessc",
         "minify_all" => false,
         "minify_selected" => [

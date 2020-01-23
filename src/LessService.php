@@ -6,11 +6,11 @@ class LessService{
 
     static public function checkFiles(){
 
-        if(!config("assets.less.enabled")){
+        if(!Manager::config("assets.less.enabled")){
             return false;
         }
 
-        $filesSources = config("assets.less.sources");
+        $filesSources = Manager::config("assets.less.sources");
 
         foreach(glob($filesSources."/*", GLOB_ONLYDIR) as $dir){
 
@@ -37,7 +37,7 @@ class LessService{
 
     static private function getCssFilePath($dir){
 
-        $filesCompiled = config("assets.less.compiled");
+        $filesCompiled = Manager::config("assets.less.compiled");
 
         return $filesCompiled."/".basename($dir).".css";
     }
@@ -63,11 +63,19 @@ class LessService{
 		        unlink($cssFile);
 	        }
 
-            $command = "lessc {$lessFile} {$cssFile} 2>&1";
+	        $minify = "";
+
+	        if(Manager::config("assets.less.minify")){
+	            $minify = "--clean-css";
+            }
+
+            $command = "lessc {$lessFile} {$cssFile} {$minify} 2>&1";
 
 	        Logger::debug($command);
 
             exec($command, $output);
+
+            Logger::debug($output);
 
             if(empty($output)){
 
