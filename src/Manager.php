@@ -6,12 +6,18 @@ namespace LaravelAssets;
 
 class Manager
 {
-    public static function config($key = "assets"){
+	public static function config($key = "assets"){
 
-        $config = [
-            "assets" => array_merge(require __DIR__."/../config/assets.php", config("assets"))
-        ];
+		$configAssets = config("assets");
 
-        return array_get($config, $key);
-    }
+		if(!is_array($configAssets)){
+			$configAssets = [];
+		}
+
+		$config = [
+			"assets" => array_merge(require __DIR__."/../config/assets.php", $configAssets)
+		];
+
+		return array_get($config, $key);
+	}
 }
