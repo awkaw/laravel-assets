@@ -2,6 +2,8 @@
 
 namespace LaravelAssets;
 
+use LaravelAssets\Commands\CompileCommand;
+
 class ServiceProvider extends \Illuminate\Support\ServiceProvider{
 
     /**
@@ -11,7 +13,11 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider{
      */
     public function register()
     {
-        //
+	    if ($this->app->runningInConsole()) {
+		    $this->commands([
+			    CompileCommand::class,
+		    ]);
+	    }
     }
 
     /**
