@@ -5,9 +5,10 @@
 ##### Установите NodeJS и Lessc:
  
 ~~~
-curl -sL https://deb.nodesource.com/setup_13.x | bash -
-apt-get install -y nodejs
-ln -s /usr/bin/nodejs /usr/sbin/node # Если требуется
-npm install -g lessc
-npm install -g less-plugin-clean-css
+RUN curl -sL https://deb.nodesource.com/setup_13.x | bash -
+RUN apt-get install -y nodejs
+RUN curl -L https://npmjs.org/install.sh | sh
+RUN npm install -g less
+RUN npm install -g clean-css
+RUN npm install -g less-plugin-clean-css
 ~~~
