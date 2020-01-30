@@ -2,7 +2,7 @@
 
 ### Автоматическая генерация файлов стилей, скриптов и картинок
  
-##### Установите NodeJS и Lessc:
+##### Установите NodeJS и Less:
  
 ~~~
 RUN curl -sL https://deb.nodesource.com/setup_13.x | bash -
