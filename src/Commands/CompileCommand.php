@@ -16,7 +16,7 @@ class CompileCommand extends Command{
 	 *
 	 * @var string
 	 */
-	protected $signature = 'laravel-assets:compile';
+	protected $signature = 'laravelAssets:compile';
 
 	/**
 	 * The console command description.
