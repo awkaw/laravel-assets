@@ -13,11 +13,9 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider{
      */
     public function register()
     {
-	    if ($this->app->runningInConsole()) {
-		    $this->commands([
-			    CompileCommand::class,
-		    ]);
-	    }
+        $this->commands([
+            CompileCommand::class,
+        ]);
     }
 
     /**
@@ -28,7 +26,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider{
     public function boot()
     {
         if(in_array(ServiceProvider::class, config("app.providers")) && (config("app.env") !== "production" || (config("app.env") == "production" && config("assets.watch_files_when_production")))){
-            
+
             LessService::checkFiles();
             JsService::checkFiles();
             SvgService::checkFiles();
