@@ -8,11 +8,11 @@ class SvgService{
 
 	static public function checkFiles(){
 
-		if(!Manager::config("assets.svg.enabled")){
+		if(!config("assets.svg.enabled")){
             return false;
         }
 
-		$filesSources = Manager::config("assets.svg.sources");
+		$filesSources = config("assets.svg.sources");
 
 		foreach(glob($filesSources."/*", GLOB_ONLYDIR) as $dir){
 
@@ -37,7 +37,7 @@ class SvgService{
 
 	static private function getSpriteFilePath($dir){
 
-		$filesCompiled = Manager::config("assets.svg.compiled");
+		$filesCompiled = config("assets.svg.compiled");
 
 		return $filesCompiled."/".basename($dir).".svg";
 	}
@@ -154,7 +154,7 @@ class SvgService{
 	}
 
 	public static function getUrlSymbol($symbol, $symbols = "icons"){
-		return Manager::config("assets.svg.http_path")."/{$symbols}.svg?t=".@filemtime(Manager::config("assets.svg.compiled")."/{$symbols}.svg")."#".self::PREFIX."{$symbol}";
+		return config("assets.svg.http_path")."/{$symbols}.svg?t=".@filemtime(config("assets.svg.compiled")."/{$symbols}.svg")."#".self::PREFIX."{$symbol}";
 	}
 
 	public static function printSvg($symbol){

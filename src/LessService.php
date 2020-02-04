@@ -6,11 +6,11 @@ class LessService{
 
     static public function checkFiles(){
 
-        if(!Manager::config("assets.less.enabled")){
+        if(!config("assets.less.enabled")){
             return false;
         }
 
-        $filesSources = Manager::config("assets.less.sources");
+        $filesSources = config("assets.less.sources");
 
         foreach(glob($filesSources."/*", GLOB_ONLYDIR) as $dir){
 
@@ -37,7 +37,7 @@ class LessService{
 
     static private function getCssFilePath($dir){
 
-        $filesCompiled = Manager::config("assets.less.compiled");
+        $filesCompiled = config("assets.less.compiled");
 
         return $filesCompiled."/".basename($dir).".css";
     }
@@ -65,7 +65,7 @@ class LessService{
 
 	        $minify = "";
 
-	        if(Manager::config("assets.less.minify")){
+	        if(config("assets.less.minify")){
 	            $minify = "--clean-css";
             }
 

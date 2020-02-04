@@ -6,11 +6,11 @@ class JsService{
 
     static public function checkFiles(){
 
-		if(!Manager::config("assets.scripts.enabled")){
+		if(!config("assets.scripts.enabled")){
             return false;
         }
 
-        $filesSources = Manager::config("assets.scripts.sources");
+        $filesSources = config("assets.scripts.sources");
 
         foreach(glob($filesSources."/*", GLOB_ONLYDIR) as $dir){
 
@@ -37,7 +37,7 @@ class JsService{
 
 	static private function getJsCompiledFilePath($dir){
 
-		$filesCompiled = Manager::config("assets.scripts.compiled");
+		$filesCompiled = config("assets.scripts.compiled");
 
 		return $filesCompiled."/".basename($dir).".js";
 	}
