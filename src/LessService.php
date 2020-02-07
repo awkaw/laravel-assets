@@ -35,6 +35,21 @@ class LessService{
         return true;
     }
 
+    static private function getMaxFileTime($dir){
+
+        $files = glob($dir."/*.less");
+        $times = [];
+
+        if(!empty($files)){
+
+            foreach ($files as $file) {
+                $times[] = filemtime($file);
+            }
+        }
+
+        return max($times);
+    }
+
     static private function getCssFilePath($dir){
 
         $filesCompiled = config("assets.less.compiled");
@@ -80,6 +95,9 @@ class LessService{
             if(empty($output)){
 
             	if(file_exists($cssFile)){
+
+            	    touch($cssFile, self::getMaxFileTime($dir));
+
 		            Logger::debug("{$cssFile} compiled");
 	            }else{
 		            Logger::debug("{$cssFile} error");

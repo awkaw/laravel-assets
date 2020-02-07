@@ -35,6 +35,21 @@ class JsService{
         return true;
     }
 
+    static private function getMaxFileTime($dir){
+
+        $files = glob($dir."/*.js");
+        $times = [];
+
+        if(!empty($files)){
+
+            foreach ($files as $file) {
+                $times[] = filemtime($file);
+            }
+        }
+
+        return max($times);
+    }
+
 	static private function getJsCompiledFilePath($dir){
 
 		$filesCompiled = config("assets.scripts.compiled");
@@ -78,6 +93,9 @@ class JsService{
 		}
 
 		if(!empty($files) && file_put_contents($jsCompiledFile, $content)){
+
+            touch($jsCompiledFile, self::getMaxFileTime($dir));
+
 			Logger::debug("{$jsCompiledFile} compiled");
 		}else{
 			Logger::debug("{$jsCompiledFile} error");
