@@ -29,11 +29,8 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider{
             __DIR__.'/../config/assets.php', 'assets'
         );
 
-        if(in_array(ServiceProvider::class, config("app.providers")) && (config("app.env") !== "production" || (config("app.env") == "production" && config("assets.watch_files_when_production")))){
-
-            LessService::checkFiles();
-            JsService::checkFiles();
-            SvgService::checkFiles();
+        if(in_array(ServiceProvider::class, config("app.providers")) && config("app.env") !== "production"){
+            Manager::checkFiles();
         }
     }
 }

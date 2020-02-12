@@ -7,6 +7,7 @@ namespace LaravelAssets\Commands;
 use Illuminate\Console\Command;
 use LaravelAssets\JsService;
 use LaravelAssets\LessService;
+use LaravelAssets\Manager;
 use LaravelAssets\SvgService;
 
 class CompileCommand extends Command{
@@ -42,8 +43,6 @@ class CompileCommand extends Command{
 	 */
 	public function handle()
 	{
-		LessService::checkFiles();
-		JsService::checkFiles();
-		SvgService::checkFiles();
+		Manager::checkFiles();
 	}
 }

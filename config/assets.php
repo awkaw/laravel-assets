@@ -3,7 +3,6 @@
 return [
 
     "debug" => true,
-    "watch_files_when_production" => true,
 
     "less" => [
         "enabled" => true,
