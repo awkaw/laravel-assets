@@ -2,7 +2,7 @@
 
 namespace LaravelAssets;
 
-class SvgService{
+class SvgService extends BaseService {
 
 	const PREFIX = "symbol_";
 
@@ -106,6 +106,8 @@ class SvgService{
 			}
 
 			$dom->save($spriteFile);
+
+            self::chmodFiles($spriteDir);
 
 			Logger::debug("{$spriteFile} compiled");
 		}

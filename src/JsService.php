@@ -2,7 +2,7 @@
 
 namespace LaravelAssets;
 
-class JsService{
+class JsService extends BaseService {
 
     static public function checkFiles(){
 
@@ -95,6 +95,8 @@ class JsService{
 		if(!empty($files) && file_put_contents($jsCompiledFile, $content)){
 
             touch($jsCompiledFile, self::getMaxFileTime($dir));
+
+            self::chmodFiles($jsDir);
 
 			Logger::debug("{$jsCompiledFile} compiled");
 		}else{

@@ -2,7 +2,7 @@
 
 namespace LaravelAssets;
 
-class LessService{
+class LessService extends BaseService {
 
     static public function checkFiles(){
 
@@ -97,6 +97,8 @@ class LessService{
             	if(file_exists($cssFile)){
 
             	    touch($cssFile, self::getMaxFileTime($dir));
+
+                    self::chmodFiles($cssDir);
 
 		            Logger::debug("{$cssFile} compiled");
 	            }else{
