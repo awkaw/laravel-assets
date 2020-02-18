@@ -115,7 +115,7 @@ class SvgService extends BaseService {
 
 	private static function cloneNode(\DOMNode $node, \DOMDocument $doc){
 
-		if(!in_array($node->nodeName, ["g","path","rect"])){
+		if(!in_array($node->nodeName, ["g","path","rect","line"])){
 			return null;
 		}
 
