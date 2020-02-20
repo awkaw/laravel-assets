@@ -5,10 +5,10 @@
 ##### Установите NodeJS и Less:
  
 ~~~
-RUN curl -sL https://deb.nodesource.com/setup_13.x | bash -
-RUN apt-get install -y nodejs
-RUN curl -L https://npmjs.org/install.sh | sh
-RUN npm install -g less
-RUN npm install -g clean-css
-RUN npm install -g less-plugin-clean-css
+curl -sL https://deb.nodesource.com/setup_13.x | bash -
+apt-get install -y nodejs
+curl -L https://npmjs.org/install.sh | sh
+npm install -g less
+npm install -g clean-css
+npm install -g less-plugin-clean-css
 ~~~

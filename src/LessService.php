@@ -2,6 +2,8 @@
 
 namespace LaravelAssets;
 
+use Illuminate\Support\Str;
+
 class LessService extends BaseService {
 
     const EXT = "less";
@@ -75,7 +77,9 @@ class LessService extends BaseService {
 
             exec($command, $output);
 
-            Logger::debug($output);
+            if(!is_null($output) && Str::length($output) > 0){
+                Logger::debug($output);
+            }
 
             if(empty($output)){
 
