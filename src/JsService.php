@@ -66,13 +66,7 @@ class JsService extends BaseService {
 		if(!empty($files)){
 
             foreach($files as $file){
-
-                if(!in_array($file, $files)){
-
-                    $files[] = $file;
-
-                    $content .= file_get_contents($file);
-                }
+                $content .= file_get_contents($file);
             }
 
             $jsDir = dirname($jsCompiledFile);
