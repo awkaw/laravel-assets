@@ -4,6 +4,8 @@ namespace LaravelAssets;
 
 class JsService extends BaseService {
 
+    const EXT = "js";
+
     static public function checkFiles(){
 
 		if(!config("assets.scripts.enabled")){
@@ -14,40 +16,23 @@ class JsService extends BaseService {
 
         foreach(glob($filesSources."/*", GLOB_ONLYDIR) as $dir){
 
-            $spriteFile = self::getJsCompiledFilePath($dir);
+            $compileFile = self::getJsCompiledFilePath($dir);
 
-            $modified = false;
+            $modified = !file_exists($compileFile);
 
-            foreach(glob($dir."/*.js") as $file){
+            if(!$modified){
+
+                $maxTimeFile = self::getMaxFileTime($dir, self::EXT);
+
+                $modified = ($maxTimeFile > filemtime($compileFile));
 
                 if($modified){
-                    continue;
+                    self::compile($dir);
                 }
-
-                $modified = (!file_exists($spriteFile) || (filemtime($file) > filemtime($spriteFile)));
-            }
-
-            if($modified){
-                self::compile($dir);
             }
         }
 
         return true;
-    }
-
-    static private function getMaxFileTime($dir){
-
-        $files = glob($dir."/*.js");
-        $times = [];
-
-        if(!empty($files)){
-
-            foreach ($files as $file) {
-                $times[] = filemtime($file);
-            }
-        }
-
-        return max($times);
     }
 
 	static private function getJsCompiledFilePath($dir){
@@ -76,31 +61,38 @@ class JsService extends BaseService {
 			$content .= file_get_contents($jsFile);
 		}
 
-		foreach(glob($dir."/*.js") as $file){
+        $files = self::getFiles($dir, self::EXT);
 
-			if(!in_array($file, $files)){
+		if(!empty($files)){
 
-				$files[] = $file;
+            foreach($files as $file){
 
-				$content .= file_get_contents($file);
-			}
-		}
+                if(!in_array($file, $files)){
 
-		$jsDir = dirname($jsCompiledFile);
+                    $files[] = $file;
 
-		if(!file_exists($jsDir)){
-			mkdir($jsDir, 0755, true);
-		}
+                    $content .= file_get_contents($file);
+                }
+            }
 
-		if(!empty($files) && file_put_contents($jsCompiledFile, $content)){
+            $jsDir = dirname($jsCompiledFile);
 
-            touch($jsCompiledFile, self::getMaxFileTime($dir));
+            if(!file_exists($jsDir)){
+                mkdir($jsDir, 0755, true);
+            }
 
-            self::chmodFiles($jsDir);
+            if(file_put_contents($jsCompiledFile, $content)){
 
-			Logger::debug("{$jsCompiledFile} compiled");
-		}else{
-			Logger::debug("{$jsCompiledFile} error");
-		}
+                $maxTime = self::getMaxFileTime($dir, self::EXT);
+
+                touch($jsCompiledFile, $maxTime, $maxTime);
+
+                self::chmodFiles($jsDir);
+
+                Logger::debug("{$jsCompiledFile} compiled");
+            }else{
+                Logger::debug("{$jsCompiledFile} error");
+            }
+        }
 	}
 }

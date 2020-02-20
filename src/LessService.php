@@ -4,6 +4,8 @@ namespace LaravelAssets;
 
 class LessService extends BaseService {
 
+    const EXT = "less";
+
     static public function checkFiles(){
 
         if(!config("assets.less.enabled")){
@@ -16,38 +18,21 @@ class LessService extends BaseService {
 
             $cssFile = self::getCssFilePath($dir);
 
-            $modified = false;
+            $modified = !file_exists($cssFile);
 
-            foreach(glob($dir."/*.less") as $file){
+            if(!$modified){
+
+                $maxTimeFile = self::getMaxFileTime($dir, self::EXT);
+
+                $modified = ($maxTimeFile > filemtime($cssFile));
 
                 if($modified){
-                    continue;
+                    self::compile($dir);
                 }
-
-                $modified = (!file_exists($cssFile) || (filemtime($file) > filemtime($cssFile)));
-            }
-
-            if($modified){
-                self::compile($dir);
             }
         }
 
         return true;
-    }
-
-    static private function getMaxFileTime($dir){
-
-        $files = glob($dir."/*.less");
-        $times = [];
-
-        if(!empty($files)){
-
-            foreach ($files as $file) {
-                $times[] = filemtime($file);
-            }
-        }
-
-        return max($times);
     }
 
     static private function getCssFilePath($dir){
@@ -96,7 +81,9 @@ class LessService extends BaseService {
 
             	if(file_exists($cssFile)){
 
-            	    touch($cssFile, self::getMaxFileTime($dir));
+            	    $maxTime = self::getMaxFileTime($dir, self::EXT);
+
+            	    touch($cssFile, $maxTime, $maxTime);
 
                     self::chmodFiles($cssDir);
 
