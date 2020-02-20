@@ -77,7 +77,7 @@ class LessService extends BaseService {
 
             exec($command, $output);
 
-            if(!is_null($output) && Str::length($output) > 0){
+            if(!is_null($output) && is_array($output) && count($output) > 0){
                 Logger::debug($output);
             }
 
