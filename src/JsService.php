@@ -58,10 +58,15 @@ class JsService extends BaseService {
 
 			$files[] = $jsFile;
 
+            Logger::debug("{$jsFile} added");
+
 			$content .= file_get_contents($jsFile);
 		}
 
         $files = self::getFiles($dir, self::EXT);
+
+        Logger::debug("List files");
+        Logger::debug($files);
 
 		if(!empty($files)){
 
@@ -71,6 +76,8 @@ class JsService extends BaseService {
 
                     $files[] = $file;
 
+                    Logger::debug("{$jsFile} added");
+
                     $content .= file_get_contents($file);
                 }
             }
@@ -79,6 +86,9 @@ class JsService extends BaseService {
             $jsInitFile = $dir."/init.".self::EXT;
 
             if(file_exists($jsInitFile)){
+
+                Logger::debug("{$jsInitFile} added");
+
                 $content .= file_get_contents($jsInitFile);
             }
 
