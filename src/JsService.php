@@ -51,12 +51,12 @@ class JsService extends BaseService {
 		$jsCompiledFile = self::getJsCompiledFilePath($dir);
 		$jsFile = self::getJsFilePath($dir);
 
-		$files = [];
+		$filesAdded = [];
 		$content = "";
 
 		if(file_exists($jsFile)){
 
-			$files[] = $jsFile;
+            $filesAdded[] = $jsFile;
 
             Logger::debug("{$jsFile} added");
 
@@ -72,9 +72,9 @@ class JsService extends BaseService {
 
             foreach($files as $file){
 
-                if(!in_array($file, $files) && !preg_match('#init\.'.self::EXT.'#', $file)){
+                if(!in_array($file, $filesAdded) && !preg_match('#init\.'.self::EXT.'#', $file)){
 
-                    $files[] = $file;
+                    $filesAdded[] = $file;
 
                     Logger::debug("{$jsFile} added");
 
