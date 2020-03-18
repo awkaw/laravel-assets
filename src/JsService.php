@@ -67,7 +67,7 @@ class JsService extends BaseService {
 
             foreach($files as $file){
 
-                if(!in_array($file, $files) && !preg_match('#init\.js#', $file)){
+                if(!in_array($file, $files) && !preg_match('#init\.'.self::EXT.'#', $file)){
 
                     $files[] = $file;
 
@@ -76,14 +76,10 @@ class JsService extends BaseService {
             }
 
             // init.js last include
-            foreach($files as $file){
+            $jsInitFile = $dir."/init.".self::EXT;
 
-                if(!in_array($file, $files) && preg_match('#init\.js#', $file)){
-
-                    $files[] = $file;
-
-                    $content .= file_get_contents($file);
-                }
+            if(file_exists($jsInitFile)){
+                $content .= file_get_contents($jsInitFile);
             }
 
             $jsDir = dirname($jsCompiledFile);
