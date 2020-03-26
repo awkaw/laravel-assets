@@ -25,10 +25,10 @@ class JsService extends BaseService {
                 $maxTimeFile = self::getMaxFileTime($dir, self::EXT);
 
                 $modified = ($maxTimeFile > filemtime($compileFile));
+            }
 
-                if($modified){
-                    self::compile($dir);
-                }
+            if($modified){
+                self::compile($dir);
             }
         }
 

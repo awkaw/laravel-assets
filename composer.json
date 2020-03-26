@@ -1,7 +1,7 @@
 {
     "name": "awkaw/laravel-assets",
     "description": "Compile Assets for Laravel",
-    "version" : "1.0.12",
+    "version" : "1.0.13",
     "license" : "BSD-3-Clause",
     "keywords": ["assets", "laravel"],
     "authors" : [

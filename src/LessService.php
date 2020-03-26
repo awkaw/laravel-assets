@@ -27,10 +27,10 @@ class LessService extends BaseService {
                 $maxTimeFile = self::getMaxFileTime($dir, self::EXT);
 
                 $modified = ($maxTimeFile > filemtime($cssFile));
+            }
 
-                if($modified){
-                    self::compile($dir);
-                }
+            if($modified){
+                self::compile($dir);
             }
         }
 
