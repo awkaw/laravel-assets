@@ -2,6 +2,8 @@
 
 namespace LaravelAssets;
 
+use Illuminate\Support\Str;
+
 class SvgService extends BaseService {
 
 	const PREFIX = "symbol_";
@@ -149,11 +151,39 @@ class SvgService extends BaseService {
 	public static function svgFromFile($path){
 
 		if(file_exists($path)){
-			return file_get_contents($path);
+			return self::generateIDs(file_get_contents($path));
 		}
 
 		return null;
 	}
+
+	private static function generateIDs($content){
+
+	    if(preg_match_all('#\{(.*?)\}#', $content, $matches)){
+
+	        $ids = [];
+
+	        if(isset($matches[1]) && !empty($matches[1])){
+
+                foreach ($matches[1] as $match) {
+                    $ids[] = $match;
+	            }
+
+                if(!empty($ids)){
+                    $ids = array_unique($ids);
+                }
+
+                foreach ($ids as $id) {
+
+                    $rnd = "svg_".Str::random(16);
+
+                    $content = preg_replace('#\{'.$id.'\}#', $rnd, $content);
+                }
+            }
+        }
+
+	    return $content;
+    }
 
 	public static function getUrlSymbol($symbol, $symbols = "icons"){
 		return config("assets.svg.http_path")."/{$symbols}.svg?t=".@filemtime(config("assets.svg.compiled")."/{$symbols}.svg")."#".self::PREFIX."{$symbol}";
