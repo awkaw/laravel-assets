@@ -7,6 +7,14 @@ use Illuminate\Support\Str;
 class LessService extends BaseService {
 
     const EXT = "less";
+    private static $sources = [];
+
+    static public function registerSources($path){
+
+        if(!in_array($path, self::$sources)){
+            self::$sources[] = $path;
+        }
+    }
 
     static public function checkFiles(){
 
@@ -14,23 +22,36 @@ class LessService extends BaseService {
             return false;
         }
 
-        $filesSources = config("assets.less.sources");
+        $configSources = config("assets.less.sources");
 
-        foreach(glob($filesSources."/*", GLOB_ONLYDIR) as $dir){
+        if(!in_array($configSources, self::$sources)){
+            self::registerSources($configSources);
+        }
 
-            $cssFile = self::getCssFilePath($dir);
+        if(!empty(self::$sources)){
 
-            $modified = !file_exists($cssFile);
+            foreach (self::$sources as $filesSources) {
 
-            if(!$modified){
+                if(file_exists($filesSources)){
 
-                $maxTimeFile = self::getMaxFileTime($dir, self::EXT);
+                    foreach(glob($filesSources."/*", GLOB_ONLYDIR) as $dir){
 
-                $modified = ($maxTimeFile > filemtime($cssFile));
-            }
+                        $cssFile = self::getCssFilePath($dir);
 
-            if($modified){
-                self::compile($dir);
+                        $modified = !file_exists($cssFile);
+
+                        if(!$modified){
+
+                            $maxTimeFile = self::getMaxFileTime($dir, self::EXT);
+
+                            $modified = ($maxTimeFile > filemtime($cssFile));
+                        }
+
+                        if($modified){
+                            self::compile($dir);
+                        }
+                    }
+                }
             }
         }
 

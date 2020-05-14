@@ -5,6 +5,14 @@ namespace LaravelAssets;
 class JsService extends BaseService {
 
     const EXT = "js";
+    private static $sources = [];
+
+    static public function registerSources($path){
+
+        if(!in_array($path, self::$sources)){
+            self::$sources[] = $path;
+        }
+    }
 
     static public function checkFiles(){
 
@@ -12,23 +20,36 @@ class JsService extends BaseService {
             return false;
         }
 
-        $filesSources = config("assets.scripts.sources");
+        $configSources = config("assets.scripts.sources");
 
-        foreach(glob($filesSources."/*", GLOB_ONLYDIR) as $dir){
+        if(!in_array($configSources, self::$sources)){
+            self::registerSources($configSources);
+        }
 
-            $compileFile = self::getJsCompiledFilePath($dir);
+        if(!empty(self::$sources)) {
 
-            $modified = !file_exists($compileFile);
+            foreach (self::$sources as $filesSources) {
 
-            if(!$modified){
+                if (file_exists($filesSources)) {
 
-                $maxTimeFile = self::getMaxFileTime($dir, self::EXT);
+                    foreach(glob($filesSources."/*", GLOB_ONLYDIR) as $dir){
 
-                $modified = ($maxTimeFile > filemtime($compileFile));
-            }
+                        $compileFile = self::getJsCompiledFilePath($dir);
 
-            if($modified){
-                self::compile($dir);
+                        $modified = !file_exists($compileFile);
+
+                        if(!$modified){
+
+                            $maxTimeFile = self::getMaxFileTime($dir, self::EXT);
+
+                            $modified = ($maxTimeFile > filemtime($compileFile));
+                        }
+
+                        if($modified){
+                            self::compile($dir);
+                        }
+                    }
+                }
             }
         }
 

@@ -7,6 +7,14 @@ use Illuminate\Support\Str;
 class SvgService extends BaseService {
 
 	const PREFIX = "symbol_";
+    private static $sources = [];
+
+    static public function registerSources($path){
+
+        if(!in_array($path, self::$sources)){
+            self::$sources[] = $path;
+        }
+    }
 
 	static public function checkFiles(){
 
@@ -14,27 +22,40 @@ class SvgService extends BaseService {
             return false;
         }
 
-		$filesSources = config("assets.svg.sources");
+        $configSources = config("assets.svg.sources");
 
-		foreach(glob($filesSources."/*", GLOB_ONLYDIR) as $dir){
+        if(!in_array($configSources, self::$sources)){
+            self::registerSources($configSources);
+        }
 
-			$spriteFile = self::getSpriteFilePath($dir);
+        if(!empty(self::$sources)) {
 
-			$modified = false;
+            foreach (self::$sources as $filesSources) {
 
-			foreach(glob($dir."/*.svg") as $file){
+                if (file_exists($filesSources)) {
 
-				if($modified){
-					continue;
-				}
+                    foreach(glob($filesSources."/*", GLOB_ONLYDIR) as $dir){
 
-				$modified = (!file_exists($spriteFile) || (filemtime($file) > filemtime($spriteFile)));
-			}
+                        $spriteFile = self::getSpriteFilePath($dir);
 
-			if($modified){
-				self::compile($dir);
-			}
-		}
+                        $modified = false;
+
+                        foreach(glob($dir."/*.svg") as $file){
+
+                            if($modified){
+                                continue;
+                            }
+
+                            $modified = (!file_exists($spriteFile) || (filemtime($file) > filemtime($spriteFile)));
+                        }
+
+                        if($modified){
+                            self::compile($dir);
+                        }
+                    }
+                }
+            }
+        }
 	}
 
 	static private function getSpriteFilePath($dir){
