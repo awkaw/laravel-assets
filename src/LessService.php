@@ -92,7 +92,13 @@ class LessService extends BaseService {
 	            $minify = "--clean-css";
             }
 
-            $command = "lessc {$lessFile} {$cssFile} {$minify} 2>&1";
+	        $fileLessc = __DIR__."/../lessc/lessc";
+
+	        if(file_exists($fileLessc)){
+                $command = "{$fileLessc} {$lessFile} {$cssFile} {$minify} 2>&1";
+            }else{
+                $command = "lessc {$lessFile} {$cssFile} {$minify} 2>&1";
+            }
 
 	        Logger::debug($command);
 
