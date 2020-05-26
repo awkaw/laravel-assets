@@ -13,6 +13,8 @@
   "author": "awkaw",
   "license": "ISC",
   "dependencies": {
-    "clone": "^2.1.2"
+    "clean-css": "^4.2.3",
+    "clone": "^2.1.2",
+    "less-plugin-clean-css": "^1.5.1"
   }
 }
