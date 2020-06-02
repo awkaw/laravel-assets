@@ -7,7 +7,7 @@ return [
     "less" => [
         "enabled" => true,
         "minify" => true,
-        "compiler" => "lessc",
+        "compiler" => "lessc", // mix or lessc
         "minify_all" => false,
         "minify_selected" => [
             resource_path("less/reset")
@@ -18,6 +18,7 @@ return [
 
 	"svg" => [
         "enabled" => true,
+        "compiler" => "php", // mix or php
 		"sources" => resource_path("svg"),
 		"http_path" => "/assets/images/svg",
 		"compiled" => public_path("assets/images/svg"),
@@ -25,6 +26,7 @@ return [
 
     "scripts" => [
         "enabled" => true,
+        "compiler" => "php", // mix or php
         "sources" => resource_path("js"),
         "compiled" => public_path("assets/js"),
     ]

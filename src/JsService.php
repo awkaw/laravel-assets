@@ -71,7 +71,7 @@ class JsService extends BaseService {
 
 	static public function compile($dir){
 
-        if(file_exists(base_path("node_modules"))){
+        if(config("assets.scripts.compiler") == "mix"){
 
             if(Str::lower(config("app.env")) == "production"){
                 $command = "cd ".base_path("/")." && npm run prod";

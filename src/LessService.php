@@ -82,7 +82,7 @@ class LessService extends BaseService {
 
         if(file_exists($lessFile)){
 
-            if(file_exists(base_path("node_modules"))){
+            if(config("assets.less.compiler") == "mix"){
 
                 if(Str::lower(config("app.env")) == "production"){
                     $command = "cd ".base_path("/")." && npm run prod";
