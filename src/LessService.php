@@ -82,22 +82,33 @@ class LessService extends BaseService {
 
         if(file_exists($lessFile)){
 
-	        if(file_exists($cssFile)){
-		        unlink($cssFile);
-	        }
+            if(file_exists(base_path("node_modules"))){
 
-	        $minify = "";
+                if(Str::lower(config("app.env")) == "production"){
+                    $command = "cd ".base_path("/")." && npm run prod";
+                }else{
+                    $command = "cd ".base_path("/")." && npm run dev";
+                }
 
-	        if(config("assets.less.minify")){
-	            $minify = "--clean-css";
-            }
-
-	        $fileLessc = __DIR__."/../lessc/lessc";
-
-	        if(file_exists($fileLessc)){
-                $command = "{$fileLessc} {$lessFile} {$cssFile} {$minify} 2>&1";
             }else{
-                $command = "lessc {$lessFile} {$cssFile} {$minify} 2>&1";
+
+                if(file_exists($cssFile)){
+                    unlink($cssFile);
+                }
+
+                $minify = "";
+
+                if(config("assets.less.minify")){
+                    $minify = "--clean-css";
+                }
+
+                $fileLessc = __DIR__."/../lessc/lessc";
+
+                if(file_exists($fileLessc)){
+                    $command = "{$fileLessc} {$lessFile} {$cssFile} {$minify} 2>&1";
+                }else{
+                    $command = "lessc {$lessFile} {$cssFile} {$minify} 2>&1";
+                }
             }
 
 	        Logger::debug($command);

@@ -71,69 +71,86 @@ class SvgService extends BaseService {
 
 	static public function compile($dir){
 
-		$spriteFile = self::getSpriteFilePath($dir);
+        if(file_exists(base_path("node_modules"))){
 
-		$baseDir = dirname($spriteFile);
+            if(Str::lower(config("app.env")) == "production"){
+                $command = "cd ".base_path("/")." && npm run prod";
+            }else{
+                $command = "cd ".base_path("/")." && npm run dev";
+            }
 
-		if(!file_exists($baseDir)){
-			mkdir($baseDir, 0755, true);
-		}
+            exec($command, $output);
 
-		$files = glob($dir."/*.svg");
+            if(!is_null($output) && is_array($output) && count($output) > 0){
+                Logger::debug($output);
+            }
 
-		if(!empty($files)){
+        }else{
 
-			$dom = new \DOMDocument();
+            $spriteFile = self::getSpriteFilePath($dir);
 
-			$root = $dom->createElementNS('http://www.w3.org/2000/svg', 'svg');
+            $baseDir = dirname($spriteFile);
 
-			$dom->appendChild($root);
+            if (!file_exists($baseDir)) {
+                mkdir($baseDir, 0755, true);
+            }
 
-			$root->setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+            $files = glob($dir . "/*.svg");
 
-			foreach($files as $index => $file){
+            if (!empty($files)) {
 
-				$fileInfo = pathinfo($file);
+                $dom = new \DOMDocument();
 
-				$name = $fileInfo['filename'];
+                $root = $dom->createElementNS('http://www.w3.org/2000/svg', 'svg');
 
-				$symbol = $dom->createElement('symbol');
+                $dom->appendChild($root);
 
-				$doc = new \DOMDocument();
-				$doc->loadXML(file_get_contents($file));
-				$element = $doc->documentElement;
+                $root->setAttribute('xmlns', 'http://www.w3.org/2000/svg');
 
-				$symbol->setAttribute('id', self::PREFIX."{$name}");
-				$symbol->setAttribute('class', "svg_image");
-				$symbol->setAttribute('viewBox', $element->attributes["viewBox"]->value);
+                foreach ($files as $index => $file) {
 
-				if(count($element->childNodes) > 0){
+                    $fileInfo = pathinfo($file);
 
-					foreach($element->childNodes as $child_node){
+                    $name = $fileInfo['filename'];
 
-						$node = self::cloneNode($child_node, $dom);
+                    $symbol = $dom->createElement('symbol');
 
-						if(!is_null($node)){
-							$symbol->appendChild($node);
-						}
-					}
-				}
+                    $doc = new \DOMDocument();
+                    $doc->loadXML(file_get_contents($file));
+                    $element = $doc->documentElement;
 
-				$root->appendChild($symbol);
-			}
+                    $symbol->setAttribute('id', self::PREFIX . "{$name}");
+                    $symbol->setAttribute('class', "svg_image");
+                    $symbol->setAttribute('viewBox', $element->attributes["viewBox"]->value);
 
-			$spriteDir = dirname($spriteFile);
+                    if (count($element->childNodes) > 0) {
 
-			if(!file_exists($spriteDir)){
-				mkdir($spriteDir, 0755, true);
-			}
+                        foreach ($element->childNodes as $child_node) {
 
-			$dom->save($spriteFile);
+                            $node = self::cloneNode($child_node, $dom);
 
-            self::chmodFiles($spriteDir);
+                            if (!is_null($node)) {
+                                $symbol->appendChild($node);
+                            }
+                        }
+                    }
 
-			Logger::debug("{$spriteFile} compiled");
-		}
+                    $root->appendChild($symbol);
+                }
+
+                $spriteDir = dirname($spriteFile);
+
+                if (!file_exists($spriteDir)) {
+                    mkdir($spriteDir, 0755, true);
+                }
+
+                $dom->save($spriteFile);
+
+                self::chmodFiles($spriteDir);
+
+                Logger::debug("{$spriteFile} compiled");
+            }
+        }
 	}
 
 	private static function cloneNode(\DOMNode $node, \DOMDocument $doc){

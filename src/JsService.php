@@ -2,6 +2,8 @@
 
 namespace LaravelAssets;
 
+use Illuminate\Support\Str;
+
 class JsService extends BaseService {
 
     const EXT = "js";
@@ -69,67 +71,84 @@ class JsService extends BaseService {
 
 	static public function compile($dir){
 
-		$jsCompiledFile = self::getJsCompiledFilePath($dir);
-		$jsFile = self::getJsFilePath($dir);
+        if(file_exists(base_path("node_modules"))){
 
-		$filesAdded = [];
-		$content = "";
-
-		if(file_exists($jsFile)){
-
-            $filesAdded[] = $jsFile;
-
-            Logger::debug("{$jsFile} added");
-
-			$content .= file_get_contents($jsFile);
-		}
-
-        $files = self::getFiles($dir, self::EXT);
-
-        Logger::debug("List files");
-        Logger::debug($files);
-
-		if(!empty($files)){
-
-            foreach($files as $file){
-
-                if(!in_array($file, $filesAdded) && !preg_match('#init\.'.self::EXT.'#', $file)){
-
-                    $filesAdded[] = $file;
-
-                    Logger::debug("{$jsFile} added");
-
-                    $content .= file_get_contents($file);
-                }
-            }
-
-            // init.js last include
-            $jsInitFile = $dir."/init.".self::EXT;
-
-            if(file_exists($jsInitFile)){
-
-                Logger::debug("{$jsInitFile} added");
-
-                $content .= file_get_contents($jsInitFile);
-            }
-
-            $jsDir = dirname($jsCompiledFile);
-
-            if(!file_exists($jsDir)){
-                mkdir($jsDir, 0755, true);
-            }
-
-            if(file_put_contents($jsCompiledFile, $content)){
-
-                $maxTime = self::getMaxFileTime($dir, self::EXT);
-
-                touch($jsCompiledFile, $maxTime, $maxTime);
-
-                self::chmodFiles($jsDir);
-
-                Logger::debug("{$jsCompiledFile} compiled");
+            if(Str::lower(config("app.env")) == "production"){
+                $command = "cd ".base_path("/")." && npm run prod";
             }else{
-                Logger::debug("{$jsCompiledFile} error");
+                $command = "cd ".base_path("/")." && npm run dev";
+            }
+
+            exec($command, $output);
+
+            if(!is_null($output) && is_array($output) && count($output) > 0){
+                Logger::debug($output);
+            }
+
+        }else{
+
+            $jsCompiledFile = self::getJsCompiledFilePath($dir);
+            $jsFile = self::getJsFilePath($dir);
+
+            $filesAdded = [];
+            $content = "";
+
+            if (file_exists($jsFile)) {
+
+                $filesAdded[] = $jsFile;
+
+                Logger::debug("{$jsFile} added");
+
+                $content .= file_get_contents($jsFile);
+            }
+
+            $files = self::getFiles($dir, self::EXT);
+
+            Logger::debug("List files");
+            Logger::debug($files);
+
+            if (!empty($files)) {
+
+                foreach ($files as $file) {
+
+                    if (!in_array($file, $filesAdded) && !preg_match('#init\.' . self::EXT . '#', $file)) {
+
+                        $filesAdded[] = $file;
+
+                        Logger::debug("{$jsFile} added");
+
+                        $content .= file_get_contents($file);
+                    }
+                }
+
+                // init.js last include
+                $jsInitFile = $dir . "/init." . self::EXT;
+
+                if (file_exists($jsInitFile)) {
+
+                    Logger::debug("{$jsInitFile} added");
+
+                    $content .= file_get_contents($jsInitFile);
+                }
+
+                $jsDir = dirname($jsCompiledFile);
+
+                if (!file_exists($jsDir)) {
+                    mkdir($jsDir, 0755, true);
+                }
+
+                if (file_put_contents($jsCompiledFile, $content)) {
+
+                    $maxTime = self::getMaxFileTime($dir, self::EXT);
+
+                    touch($jsCompiledFile, $maxTime, $maxTime);
+
+                    self::chmodFiles($jsDir);
+
+                    Logger::debug("{$jsCompiledFile} compiled");
+                } else {
+                    Logger::debug("{$jsCompiledFile} error");
+                }
             }
         }
 	}
