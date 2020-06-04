@@ -105,7 +105,7 @@ class LessService extends BaseService {
                 $fileLessc = __DIR__."/../lessc/lessc";
 
                 if(file_exists($fileLessc)){
-                    $command = "{$fileLessc} {$lessFile} {$cssFile} {$minify} 2>&1";
+                    $command = "chmod +x {$fileLessc} && {$fileLessc} {$lessFile} {$cssFile} {$minify} 2>&1";
                 }else{
                     $command = "lessc {$lessFile} {$cssFile} {$minify} 2>&1";
                 }
